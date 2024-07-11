@@ -2,15 +2,12 @@
 	overflow:hidden;
 }
 body { 
-	width: 412px;
+	width: 1920px;
+	height: 1080px;
     background-color:rgba(0,0,0,1);
     margin: 0;
     padding: 0;
     border: 0;
-}
-header{
-    width: 100%;
-    background-color: antiquewhite;
 }
 
 .e13_36 { 
