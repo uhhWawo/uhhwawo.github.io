@@ -6,6 +6,7 @@
 	width:393px;
 	height:852px;
 	position:absolute;
+	margin: 0 auto;
 }
 .e13_36 { 
 	width:279px;
@@ -16,6 +17,7 @@
 	background-image:url(/images/options_2.png);
 	background-repeat:no-repeat;
 	background-size:cover;
+	margin: 0 auto;
 }
 .e7_36 { 
 	width:99px;
@@ -23,6 +25,7 @@
 	position:absolute;
 	left:66px;
 	top:124px;
+	margin: 0 auto;
 }
 .e7_37 { 
 	color:rgba(0, 0, 0, 1);
@@ -36,6 +39,7 @@
 	font-size:17px;
 	letter-spacing:0;
 	line-height:px;
+	margin: 0 auto;
 }
 .e7_38 { 
 	width:99px;
@@ -43,6 +47,7 @@
 	position:absolute;
 	left:237px;
 	top:126px;
+	margin: 0 auto;
 }
 .e12_21 { 
 	width:16px;
@@ -53,6 +58,7 @@
 	background-image:url(/images/cellular_connection_1.png);
 	background-repeat:no-repeat;
 	background-size:cover;
+	margin: 0 auto;
 }
 .e12_20 { 
 	width:13px;
@@ -63,6 +69,7 @@
 	background-image:url(/images/wifi__1__1.png);
 	background-repeat:no-repeat;
 	background-size:cover;
+	margin: 0 auto;
 }
 .e12_19 { 
 	width:22px;
@@ -73,6 +80,7 @@
 	background-image:url(/images/battery__1__1.png);
 	background-repeat:no-repeat;
 	background-size:cover;
+	margin: 0 auto;
 }
 .e7_21 { 
 	color:rgba(0, 0, 0, 1);
@@ -86,6 +94,7 @@
 	font-size:20px;
 	letter-spacing:0;
 	line-height:px;
+	margin: 0 auto;
 }
 .e7_22 { 
 	width:201px;
@@ -96,6 +105,7 @@
 	background-image:url(/images/a_1.png);
 	background-repeat:no-repeat;
 	background-size:cover;
+	margin: 0 auto;
 }
 .e7_35 { 
 	width:336px;
@@ -106,4 +116,5 @@
 	background-image:url(/images/iphone_15_pro___black_titanium___portrait.png);
 	background-repeat:no-repeat;
 	background-size:cover;
+	margin: 0 auto;
 }
