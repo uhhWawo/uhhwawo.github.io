@@ -13,7 +13,7 @@
 	position:absolute;
 	left:766px;
 	top:120px;
-	background-image:url(images/options_3.png);
+	background-image:url(/images/options_3.png);
 	background-repeat:no-repeat;
 	background-size:cover;
 }
@@ -23,7 +23,7 @@
 	position:absolute;
 	left:891px;
 	top:949px;
-	background-image:url(images/home_indicator_1.png);
+	background-image:url(/images/home_indicator_1.png);
 	background-repeat:no-repeat;
 	background-size:cover;
 }
@@ -60,7 +60,7 @@
 	position:absolute;
 	left:17px;
 	top:15px;
-	background-image:url(images/cellular_connection_1.png);
+	background-image:url(/images/cellular_connection_1.png);
 	background-repeat:no-repeat;
 	background-size:cover;
 }
@@ -70,7 +70,7 @@
 	position:absolute;
 	left:40px;
 	top:15px;
-	background-image:url(images/wifi__1__1.png);
+	background-image:url(/images/wifi__1__1.png);
 	background-repeat:no-repeat;
 	background-size:cover;
 }
@@ -80,7 +80,7 @@
 	position:absolute;
 	left:60px;
 	top:14px;
-	background-image:url(images/battery__1__1.png);
+	background-image:url(/images/battery__1__1.png);
 	background-repeat:no-repeat;
 	background-size:cover;
 }
@@ -103,7 +103,7 @@
 	position:absolute;
 	left:821px;
 	top:383px;
-	background-image:url(images/a_2.png);
+	background-image:url(/images/a_2.png);
 	background-repeat:no-repeat;
 	background-size:cover;
 }
@@ -113,7 +113,7 @@
 	position:absolute;
 	left:727px;
 	top:80px;
-	background-image:url(images/iphone_15_pro___black_titanium___portrait.png);
+	background-image:url(/images/iphone_15_pro___black_titanium___portrait.png);
 	background-repeat:no-repeat;
 	background-size:cover;
 }
