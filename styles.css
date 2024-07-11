@@ -1,13 +1,18 @@
 .7_15 { 
 	overflow:hidden;
 }
-.e7_15 { 
-	background-color:rgba(0, 0, 0, 1);
-	width:393px;
-	height:852px;
-	position:absolute;
-	margin: 0 auto;
+body { 
+	width: 412px;
+    background-color:rgba(0,0,0,1);
+    margin: 0;
+    padding: 0;
+    border: 0;
 }
+header{
+    width: 100%;
+    background-color: antiquewhite;
+}
+
 .e13_36 { 
 	width:279px;
 	height:604px;
