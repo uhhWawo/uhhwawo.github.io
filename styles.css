@@ -18,6 +18,20 @@
 	background-repeat:no-repeat;
 	background-size:cover;
 }*/
+
+@media (orientation: portrait) {
+	html {
+		transform: rotate(-90deg);
+		transform-origin: top left;
+		position: absolute;
+		top: 100%;
+		left: 0;
+		width: 100vh;
+		height: 100vw;
+	}
+}
+
+
 .e24_1581 { 
 	width:467px;
 	height:920px;
