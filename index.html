@@ -23,8 +23,18 @@
                         background-size: cover;
                         
               }
-            </style>
 
+                      @media (orientation: portrait) {
+            html {
+                transform: rotate(-90deg);
+                transform-origin: top left;
+                position: absolute;
+                top: 100%;
+                left: 0;
+            }
+        }
+            </style>
+                    
             <link rel="icon" href="/logo/favicon-96x96.png">
 
             
