@@ -126,7 +126,7 @@ ul{ margin:0; padding:0; list-style:none; }
   border-radius: 36px;
   padding: 32px 38px;
   display:grid;
-  grid-template-columns: 1.5fr 1fr;
+  grid-template-columns: 1.8fr 0.9fr;
   gap: 24px;
 }
 .about-name{
@@ -169,29 +169,35 @@ ul{ margin:0; padding:0; list-style:none; }
     display: none;
 }
 .about-contact{
-  display:flex; flex-direction:column;
-  align-items:flex-start;
-  justify-content:flex-start;
+  display: flex;
+  flex-direction: column;
   gap: 12px;
-  padding-left: 8px;
+  align-items: stretch;
+  justify-content: flex-start;
+  padding-left: 0;
+
+  width: auto;
+  margin-left: 0;
+  padding-top: 10px;
 }
 .contact-row{
-  display:flex;
-  align-items:center;
-  gap:14px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
 
-  width:100%;
-  padding:16px 18px;
+  width: calc(100% - 8px);
+  margin-left: 8px;
 
-  border-radius:16px;
-  background:#eeeeee;
+  padding: 16px 18px;
 
-  transition:.2s;
-  transform: translateX(8px);
+  border-radius: 16px;
+  background: #eeeeee;
+
+  transition: background-color .2s ease;
 }
 
 .contact-row:hover{
-  background:#bbbbbb;
+    background:#e4e4e4;
 }
 .icon-slot{
   width:28px;
@@ -333,8 +339,9 @@ ul{ margin:0; padding:0; list-style:none; }
 }
 
 @media (max-width: 720px){
-  .contact-row { transform: none; }
-  .about-card{ grid-template-columns: 1fr; padding: 30px; }
+  .contact-row { width: 100%; margin-left: 0; box-sizing: border-box; }
+  .about-card{ grid-template-columns:1fr; padding:30px; }
+  .about-contact{ width: 100%; }
   .grid-asym{ grid-template-columns: 1fr; }
   .asym-tall{ height:auto; aspect-ratio: 16/10; }
   .quote-sticky{ top: 46vh; }
