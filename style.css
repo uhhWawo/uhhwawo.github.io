@@ -333,6 +333,7 @@ ul{ margin:0; padding:0; list-style:none; }
 }
 
 @media (max-width: 720px){
+  .contact-row { transform: none; }
   .about-card{ grid-template-columns: 1fr; padding: 30px; }
   .grid-asym{ grid-template-columns: 1fr; }
   .asym-tall{ height:auto; aspect-ratio: 16/10; }
