@@ -199,6 +199,16 @@ ul{ margin:0; padding:0; list-style:none; }
 .contact-row:hover{
     background:#e4e4e4;
 }
+
+.contact-caption{
+  margin-top: 8px;
+  text-align: center;
+  font-size: .82rem;
+  font-weight: 300;
+  color: #3a3a3a;
+  letter-spacing: -.06em;
+}
+
 .icon-slot{
   width:28px;
   height:28px;
@@ -342,6 +352,7 @@ ul{ margin:0; padding:0; list-style:none; }
   .contact-row { width: 100%; margin-left: 0; box-sizing: border-box; }
   .about-card{ grid-template-columns:1fr; padding:30px; }
   .about-contact{ width: 100%; }
+  .contact-caption{ text-align: center; }
   .grid-asym{ grid-template-columns: 1fr; }
   .asym-tall{ height:auto; aspect-ratio: 16/10; }
   .quote-sticky{ top: 46vh; }
