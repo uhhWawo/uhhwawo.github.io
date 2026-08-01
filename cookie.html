@@ -43,8 +43,8 @@
   <div class="cookie-controls">
     <p class="cookie-status" id="cookieStatus">현재 상태 확인 중...</p>
     <div class="cookie-controls-actions">
-      <button type="button" id="cookieRejectPage" class="cookie-btn cookie-btn-reject">쿠키 차단</button>
-      <button type="button" id="cookieAcceptPage" class="cookie-btn cookie-btn-accept">쿠키 허용</button>
+      <button type="button" id="cookieRejectPage" class="cookie-btn cookie-btn-reject">차단</button>
+      <button type="button" id="cookieAcceptPage" class="cookie-btn cookie-btn-accept">허용</button>
     </div>
   </div>
 
@@ -184,7 +184,7 @@
 
 <script>
 (function () {
-  const CONSENT_COOKIE = '__Wawo_AGREE'; // 'granted' | 'denied'
+  const CONSENT_COOKIE = '__Wawo_AGREE';
   const EXPIRE_DAYS = 1;
 
   const statusEl = document.getElementById('cookieStatus');
@@ -213,11 +213,11 @@
 
   function updateStatus(value) {
     if (value === 'granted') {
-      statusEl.textContent = '현재 상태: 쿠키 허용됨';
+      statusEl.textContent = '현재 쿠키 허용됨';
     } else if (value === 'denied') {
-      statusEl.textContent = '현재 상태: 쿠키 차단됨';
+      statusEl.textContent = '현재 쿠키 차단됨';
     } else {
-      statusEl.textContent = '현재 상태: 선택 안 함';
+      statusEl.textContent = '현재 선택 안 함';
     }
   }
 
