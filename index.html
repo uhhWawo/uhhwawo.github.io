@@ -178,10 +178,23 @@ requestAnimationFrame(raf);
 
 <script>
 (function () {
-  const CONSENT_KEY = 'wawo_cookie_consent'; // 'granted' | 'denied'
+  const CONSENT_COOKIE = '__Wawo_AGREE';
+  const EXPIRE_DAYS = 1;
+
   const banner = document.getElementById('cookieBanner');
   const acceptBtn = document.getElementById('cookieAccept');
   const rejectBtn = document.getElementById('cookieReject');
+
+  function setCookie(name, value, days) {
+    const date = new Date();
+    date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+    document.cookie = `${name}=${value}; expires=${date.toUTCString()}; path=/; SameSite=Lax`;
+  }
+
+  function getCookie(name) {
+    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    return match ? match[2] : null;
+  }
 
   function applyConsent(value) {
     if (typeof gtag === 'function') {
@@ -202,7 +215,7 @@ requestAnimationFrame(raf);
     requestAnimationFrame(() => banner.classList.add('is-visible'));
   }
 
-  const saved = localStorage.getItem(CONSENT_KEY);
+  const saved = getCookie(CONSENT_COOKIE);
 
   if (saved === 'granted' || saved === 'denied') {
     applyConsent(saved);
@@ -211,13 +224,13 @@ requestAnimationFrame(raf);
   }
 
   acceptBtn.addEventListener('click', () => {
-    localStorage.setItem(CONSENT_KEY, 'granted');
+    setCookie(CONSENT_COOKIE, 'granted', EXPIRE_DAYS);
     applyConsent('granted');
     hideBanner();
   });
 
   rejectBtn.addEventListener('click', () => {
-    localStorage.setItem(CONSENT_KEY, 'denied');
+    setCookie(CONSENT_COOKIE, 'denied', EXPIRE_DAYS);
     applyConsent('denied');
     hideBanner();
   });
