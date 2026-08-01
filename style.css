@@ -54,7 +54,7 @@ body {
   --text: #ffffff;
   --text-dim: rgba(0, 0, 0, 0.55);
   --maxw: 1120px;
-  --radius-outer: 28px;
+  --radius-outer: 36px;
   --seam: 3px;
   --font: "SF Pro", sans-serif;
 }
