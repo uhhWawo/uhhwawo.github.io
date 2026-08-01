@@ -527,6 +527,25 @@ ul{ margin:0; padding:0; list-style:none; }
   flex-shrink: 0;
 }
 
+.cookie-policy-link-wrap{
+  display: flex;
+  justify-content: center;
+  padding: 0 24px 40px;
+}
+
+.cookie-policy-link{
+  font-size: .82rem;
+  font-weight: 500;
+  color: rgba(255,255,255,.5);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color .2s ease;
+}
+
+.cookie-policy-link:hover{
+  color: rgba(255,255,255,.85);
+}
+
 .divider {
   width: 100%;
   height: 1px;
