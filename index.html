@@ -1,13 +1,18 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <!-- Google tag (gtag.js) -->
+<!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRR9JG89GW"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  
+  gtag('consent', 'default', {
+    'analytics_storage': 'denied',
+    'ad_storage': 'denied'
+  });
 
+  gtag('js', new Date());
   gtag('config', 'G-YRR9JG89GW');
 </script>
   
@@ -155,6 +160,69 @@ function raf(time) {
 requestAnimationFrame(raf);
 </script>
 
+<div class="cookie-banner" id="cookieBanner" hidden>
+  <div class="cookie-banner-inner">
+    <div class="cookie-banner-text">
+      <span class="cookie-banner-title">쿠키 사용 안내</span>
+      <p class="cookie-banner-desc">
+        더 나은 서비스 제공을 위해 쿠키를 사용합니다.
+        <a href="https://wawo.r-e.kr/cookie" target="_blank" rel="noopener" class="cookie-link">쿠키 정책 보기 →</a>
+      </p>
+    </div>
+    <div class="cookie-banner-actions">
+      <button type="button" id="cookieReject" class="cookie-btn cookie-btn-reject">차단</button>
+      <button type="button" id="cookieAccept" class="cookie-btn cookie-btn-accept">허용</button>
+    </div>
+  </div>
+</div>
 
+<script>
+(function () {
+  const CONSENT_KEY = 'wawo_cookie_consent'; // 'granted' | 'denied'
+  const banner = document.getElementById('cookieBanner');
+  const acceptBtn = document.getElementById('cookieAccept');
+  const rejectBtn = document.getElementById('cookieReject');
+
+  function applyConsent(value) {
+    if (typeof gtag === 'function') {
+      gtag('consent', 'update', {
+        analytics_storage: value === 'granted' ? 'granted' : 'denied',
+        ad_storage: value === 'granted' ? 'granted' : 'denied'
+      });
+    }
+  }
+
+  function hideBanner() {
+    banner.classList.remove('is-visible');
+    setTimeout(() => { banner.hidden = true; }, 300);
+  }
+
+  function showBanner() {
+    banner.hidden = false;
+    requestAnimationFrame(() => banner.classList.add('is-visible'));
+  }
+
+  const saved = localStorage.getItem(CONSENT_KEY);
+
+  if (saved === 'granted' || saved === 'denied') {
+    applyConsent(saved);
+  } else {
+    showBanner();
+  }
+
+  acceptBtn.addEventListener('click', () => {
+    localStorage.setItem(CONSENT_KEY, 'granted');
+    applyConsent('granted');
+    hideBanner();
+  });
+
+  rejectBtn.addEventListener('click', () => {
+    localStorage.setItem(CONSENT_KEY, 'denied');
+    applyConsent('denied');
+    hideBanner();
+  });
+})();
+</script>
+  
 </body>
 </html>
