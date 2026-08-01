@@ -348,9 +348,103 @@ ul{ margin:0; padding:0; list-style:none; }
     transform: translateX(8px);
 }
 
+.cookie-card{
+  background: var(--card);
+  color: var(--card-text);
+  border-radius: 36px;
+  padding: 32px 38px;
+  grid-template-columns: 1.8fr 0.9fr;
+  gap: 24px;
+}
+
+.cookie-content{
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.cookie-title{
+  display:block;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #111114;
+}
+
+.cookie-desc{
+  margin-top: 2px;
+  font-size: 1.02rem;
+  color: #45454c;
+  white-space: pre-line;
+}
+
+.cookie-link{
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.cookie-link:hover {
+  color: #1d4ed8;
+  text-decoration: underline;
+}
+
+.cookie-container {
+  max-width: 1200px;
+}
+
+
+.table-wrapper {
+  margin-top: 10px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.cookie-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 13px;
+}
+
+.cookie-table th {
+  background-color: #f9fafb;
+  color: #414141;
+  font-weight: 600;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.cookie-table td {
+  padding: 16px;
+  border-bottom: 1px solid #e5e7eb;
+  color: #2b2b2b;
+}
+
+.cookie-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+
+
+.divider {
+  width: 100%;
+  height: 1px;
+  background: rgba(0,0,0,0.3);
+  margin: 15px 0;
+}
+
+html {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
+}
+
 @media (max-width: 720px){
   .contact-row { width: 100%; margin-left: 0; box-sizing: border-box; }
   .about-card{ grid-template-columns:1fr; padding:30px; }
+  .cookie-card{ grid-template-columns:1fr; padding:30px; }
   .about-contact{ width: 100%; }
   .contact-caption{ text-align: center; }
   .grid-asym{ grid-template-columns: 1fr; }
