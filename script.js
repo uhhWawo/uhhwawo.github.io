@@ -17,6 +17,14 @@ document.addEventListener("dragstart", e => e.preventDefault());
 
 document.addEventListener("selectstart", e => e.preventDefault());
 
+function hideBanner() {
+  banner.classList.remove('is-visible');
+}
+
+function showBanner() {
+  requestAnimationFrame(() => banner.classList.add('is-visible'));
+}
+
 function initStickyQuoteBlur() {
   const wrappers = document.querySelectorAll('.quote-sticky');
   if (!wrappers.length) return;
