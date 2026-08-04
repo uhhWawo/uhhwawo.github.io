@@ -18,11 +18,11 @@ document.addEventListener("dragstart", e => e.preventDefault());
 document.addEventListener("selectstart", e => e.preventDefault());
 
 function hideBanner() {
-  banner.classList.remove('is-visible');
+  banner.hidden = true;
 }
 
 function showBanner() {
-  requestAnimationFrame(() => banner.classList.add('is-visible'));
+  banner.hidden = false;
 }
 
 function initStickyQuoteBlur() {
