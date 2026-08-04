@@ -42,10 +42,6 @@ img {
 a {
     -webkit-user-drag: none;
 }
-
-body {
-    font-family: var(--font);
-}
    
 :root{
   --bg: #151515;
@@ -67,6 +63,7 @@ body{
   color: var(--text);
   font-family: var(--font);
   -webkit-font-smoothing: antialiased;
+  transition: background-color .3s ease;
 }
 h1,h2,h3,h4,h5,h6,p,span,a,li,button,input,textarea{
   font-family: var(--font);
@@ -351,11 +348,12 @@ ul{ margin:0; padding:0; list-style:none; }
 .cookie-card{
   background: var(--card);
   color: var(--card-text);
-  border-radius: 36px;
+  border-radius: calc(36px * (1 - var(--cookie-progress, 0)));
   padding: 32px 38px;
   grid-template-columns: 1.8fr 0.9fr;
   gap: 24px;
   --cookie-expand: 0px;
+  --cookie-progress: 0;
 }
 
 .cookie-content{
@@ -388,20 +386,28 @@ ul{ margin:0; padding:0; list-style:none; }
   text-decoration: underline;
 }
 
+.cookie-desc,
+.cookie-title,
+.cookie-link{
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
 .cookie-container {
   max-width: 1200px;
 }
-
 
 .table-wrapper {
   margin-top: 10px;
   border: 1px solid #e5e7eb;
   border-radius: 8px;
-  overflow: hidden;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .cookie-table {
   width: 100%;
+  min-width: 640px;
   border-collapse: collapse;
   text-align: left;
   font-size: 13px;
