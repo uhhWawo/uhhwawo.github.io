@@ -430,16 +430,9 @@ ul{ margin:0; padding:0; list-style:none; }
   display: flex;
   justify-content: center;
   padding: 20px;
-  pointer-events: none;
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity .3s ease, transform .3s ease;
-  will-change: transform, opacity;
 }
-.cookie-banner.is-visible{
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
+.cookie-banner[hidden]{
+  display: none;
 }
 .cookie-banner-inner{
   width: 100%;
@@ -456,7 +449,6 @@ ul{ margin:0; padding:0; list-style:none; }
   align-items: center;
   justify-content: space-between;
   gap: 20px;
-  will-change: backdrop-filter, transform;
 }
 
 .cookie-banner-title{
