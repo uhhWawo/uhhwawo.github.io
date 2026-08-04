@@ -28,9 +28,7 @@ function showBanner() {
 function initStickyQuoteBlur() {
   const wrappers = document.querySelectorAll('.quote-sticky');
   if (!wrappers.length) return;
-
   let ticking = false;
-
   function update() {
     wrappers.forEach((wrap) => {
       const stickyTopPx = parseFloat(getComputedStyle(wrap).top) || 0;
@@ -40,21 +38,27 @@ function initStickyQuoteBlur() {
     });
     ticking = false;
   }
+  function requestUpdate() {
+    if (!ticking) {
+      window.requestAnimationFrame(update);
+      ticking = true;
+    }
+  }
+  window.addEventListener('scroll', requestUpdate, { passive: true });
+  window.addEventListener('resize', requestUpdate);
+  update();
+}
 
-  function initCookieCardExpand() {
+function initCookieCardExpand() {
   const cards = document.querySelectorAll('.cookie-card');
   if (!cards.length) return;
-
   const START_OFFSET = 80;
   const RANGE = 240;
   const MAX_EXPAND = 24;
-
   function isMobile() {
     return window.matchMedia('(max-width: 720px)').matches;
   }
-
   let ticking = false;
-
   function update() {
     if (!isMobile()) {
       cards.forEach((card) => card.style.removeProperty('--cookie-expand'));
@@ -69,28 +73,16 @@ function initStickyQuoteBlur() {
     });
     ticking = false;
   }
-
   function requestUpdate() {
     if (!ticking) {
       window.requestAnimationFrame(update);
       ticking = true;
     }
   }
-
   window.addEventListener('scroll', requestUpdate, { passive: true });
   window.addEventListener('resize', requestUpdate);
   update();
 }
 
-  function requestUpdate() {
-    if (!ticking) {
-      window.requestAnimationFrame(update);
-      ticking = true;
-    }
-  }
-
-  window.addEventListener('scroll', requestUpdate, { passive: true });
-  window.addEventListener('resize', requestUpdate);
-  update();
-}
 initStickyQuoteBlur();
+initCookieCardExpand();
