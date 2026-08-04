@@ -355,6 +355,7 @@ ul{ margin:0; padding:0; list-style:none; }
   padding: 32px 38px;
   grid-template-columns: 1.8fr 0.9fr;
   gap: 24px;
+  --cookie-expand: 0px;
 }
 
 .cookie-content{
@@ -556,7 +557,11 @@ html::-webkit-scrollbar {
 @media (max-width: 720px){
   .contact-row { width: 100%; margin-left: 0; box-sizing: border-box; }
   .about-card{ grid-template-columns:1fr; padding:30px; }
-  .cookie-card{ grid-template-columns:1fr; padding:30px; }
+  .cookie-card{
+    margin-left: calc(-1 * var(--cookie-expand));
+    margin-right: calc(-1 * var(--cookie-expand));
+    border-radius: calc(36px - var(--cookie-expand));
+  }
   .about-contact{ width: 100%; }
   .contact-caption{ text-align: center; }
   .grid-asym{ grid-template-columns: 1fr; }
