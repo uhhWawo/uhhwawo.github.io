@@ -55,30 +55,46 @@ function initCookieCardExpand() {
   const START_OFFSET = 80;
   const RANGE = 240;
   const MAX_EXPAND = 24;
+
   function isMobile() {
     return window.matchMedia('(max-width: 720px)').matches;
   }
+
   let ticking = false;
+
   function update() {
     if (!isMobile()) {
-      cards.forEach((card) => card.style.removeProperty('--cookie-expand'));
+      cards.forEach((card) => {
+        card.style.removeProperty('--cookie-expand');
+        card.style.removeProperty('--cookie-progress');
+      });
+      document.body.style.removeProperty('background-color');
       ticking = false;
       return;
     }
+
+    let maxProgress = 0;
     cards.forEach((card) => {
       const rect = card.getBoundingClientRect();
       const scrolledPast = START_OFFSET - rect.top;
       const progress = Math.min(Math.max(scrolledPast / RANGE, 0), 1);
       card.style.setProperty('--cookie-expand', (progress * MAX_EXPAND) + 'px');
+      card.style.setProperty('--cookie-progress', progress);
+      maxProgress = Math.max(maxProgress, progress);
     });
+
+    document.body.style.backgroundColor = maxProgress > 0.05 ? '#ffffff' : '';
+
     ticking = false;
   }
+
   function requestUpdate() {
     if (!ticking) {
       window.requestAnimationFrame(update);
       ticking = true;
     }
   }
+
   window.addEventListener('scroll', requestUpdate, { passive: true });
   window.addEventListener('resize', requestUpdate);
   update();
