@@ -41,6 +41,47 @@ function initStickyQuoteBlur() {
     ticking = false;
   }
 
+  function initCookieCardExpand() {
+  const cards = document.querySelectorAll('.cookie-card');
+  if (!cards.length) return;
+
+  const START_OFFSET = 80;
+  const RANGE = 240;
+  const MAX_EXPAND = 24;
+
+  function isMobile() {
+    return window.matchMedia('(max-width: 720px)').matches;
+  }
+
+  let ticking = false;
+
+  function update() {
+    if (!isMobile()) {
+      cards.forEach((card) => card.style.removeProperty('--cookie-expand'));
+      ticking = false;
+      return;
+    }
+    cards.forEach((card) => {
+      const rect = card.getBoundingClientRect();
+      const scrolledPast = START_OFFSET - rect.top;
+      const progress = Math.min(Math.max(scrolledPast / RANGE, 0), 1);
+      card.style.setProperty('--cookie-expand', (progress * MAX_EXPAND) + 'px');
+    });
+    ticking = false;
+  }
+
+  function requestUpdate() {
+    if (!ticking) {
+      window.requestAnimationFrame(update);
+      ticking = true;
+    }
+  }
+
+  window.addEventListener('scroll', requestUpdate, { passive: true });
+  window.addEventListener('resize', requestUpdate);
+  update();
+}
+
   function requestUpdate() {
     if (!ticking) {
       window.requestAnimationFrame(update);
