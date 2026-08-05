@@ -104,8 +104,8 @@ function initCookieRain() {
   const container = document.getElementById('cookieRain');
   if (!container) return;
 
-  const FALLING_COOKIE_SRC = 'assets/cookie/cookie.png';       // 떨어지는 쿠키 이미지
-  const STACK_IMG_SRC = 'assets/cookie/cookie-stack.png';       // 바닥에 쌓인 쿠키 이미지 (한 장)
+  const FALLING_COOKIE_SRC = 'assets/cookie/cookie.png';
+  const STACK_IMG_SRC = 'assets/cookie/cookie-stack.png';
   const COOKIE_SIZE = 34;
 
   const FALL_SPAWN_INTERVAL = 180;
@@ -114,8 +114,6 @@ function initCookieRain() {
   const FALL_SPEED_MAX = 5;
 
   let fallingCookies = [];
-  let spawnTimer = null;
-  let rafId = null;
 
   function buildStack() {
     const img = document.createElement('img');
@@ -165,22 +163,12 @@ function initCookieRain() {
       return true;
     });
 
-    rafId = requestAnimationFrame(tick);
+    requestAnimationFrame(tick);
   }
 
-  function reset() {
-    clearInterval(spawnTimer);
-    cancelAnimationFrame(rafId);
-    container.innerHTML = '';
-    fallingCookies = [];
-
-    buildStack();
-    spawnTimer = setInterval(spawnFallingCookie, FALL_SPAWN_INTERVAL);
-    rafId = requestAnimationFrame(tick);
-  }
-
-  reset();
-  window.addEventListener('resize', reset);
+  buildStack();
+  setInterval(spawnFallingCookie, FALL_SPAWN_INTERVAL);
+  requestAnimationFrame(tick);
 }
 
 initStickyQuoteBlur();
