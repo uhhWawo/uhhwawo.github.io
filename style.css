@@ -556,9 +556,23 @@ ul{ margin:0; padding:0; list-style:none; }
   position: absolute;
   top: 0;
   left: 0;
-  line-height: 1;
-  user-select: none;
   will-change: transform;
+}
+
+.cookie-rain-item img{
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.cookie-stack-img{
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  object-fit: cover;
+  object-position: bottom;
 }
 
 .divider {
