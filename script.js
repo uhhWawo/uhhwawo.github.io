@@ -100,5 +100,112 @@ function initCookieCardExpand() {
   update();
 }
 
+function initCookieRain() {
+  const container = document.getElementById('cookieRain');
+  if (!container) return;
+
+  const EMOJI = '🍪';
+  const COOKIE_SIZE = 30;
+  const COLUMN_WIDTH = 24;
+  const MAX_COOKIES = 60;
+  const SPAWN_INTERVAL = 260;
+  const GRAVITY = 0.35;
+  const MAX_FALL_SPEED = 9;
+
+  let columnHeights = [];
+  let activeCookies = [];
+  let landedCount = 0;
+  let spawnTimer = null;
+  let rafId = null;
+
+  function setupColumns() {
+    const cols = Math.ceil(window.innerWidth / COLUMN_WIDTH) + 1;
+    columnHeights = new Array(cols).fill(0);
+  }
+
+  function getColumnRange(x, width) {
+    const start = Math.max(0, Math.floor(x / COLUMN_WIDTH));
+    const end = Math.min(columnHeights.length - 1, Math.floor((x + width) / COLUMN_WIDTH));
+    return [start, end];
+  }
+
+  function getStackHeight(x, width) {
+    const [start, end] = getColumnRange(x, width);
+    let max = 0;
+    for (let i = start; i <= end; i++) {
+      max = Math.max(max, columnHeights[i] || 0);
+    }
+    return max;
+  }
+
+  function setStackHeight(x, width, height) {
+    const [start, end] = getColumnRange(x, width);
+    for (let i = start; i <= end; i++) {
+      columnHeights[i] = Math.max(columnHeights[i] || 0, height);
+    }
+  }
+
+  function spawnCookie() {
+    if (landedCount >= MAX_COOKIES) return;
+
+    const el = document.createElement('span');
+    el.className = 'cookie-rain-item';
+    el.textContent = EMOJI;
+
+    const x = Math.random() * (window.innerWidth - COOKIE_SIZE);
+    const rotation = (Math.random() * 40) - 20;
+    el.style.fontSize = COOKIE_SIZE + 'px';
+    el.style.transform = `translate(${x}px, -40px) rotate(${rotation}deg)`;
+    container.appendChild(el);
+
+    activeCookies.push({
+      el, x, y: -40, vy: 0,
+      rotation,
+      rotSpeed: (Math.random() * 4) - 2,
+      width: COOKIE_SIZE
+    });
+  }
+
+  function tick() {
+    const groundY = window.innerHeight;
+    activeCookies = activeCookies.filter((c) => {
+      c.vy = Math.min(c.vy + GRAVITY, MAX_FALL_SPEED);
+      c.y += c.vy;
+      c.rotation += c.rotSpeed;
+
+      const stackHeight = getStackHeight(c.x, c.width);
+      const landingY = groundY - stackHeight - c.width * 0.6;
+
+      if (c.y >= landingY) {
+        c.y = landingY;
+        c.el.style.transform = `translate(${c.x}px, ${c.y}px) rotate(${c.rotation}deg)`;
+        setStackHeight(c.x, c.width, stackHeight + c.width * 0.55);
+        landedCount++;
+        return false;
+      }
+
+      c.el.style.transform = `translate(${c.x}px, ${c.y}px) rotate(${c.rotation}deg)`;
+      return true;
+    });
+
+    rafId = requestAnimationFrame(tick);
+  }
+
+  function reset() {
+    clearInterval(spawnTimer);
+    cancelAnimationFrame(rafId);
+    container.innerHTML = '';
+    activeCookies = [];
+    landedCount = 0;
+    setupColumns();
+    spawnTimer = setInterval(spawnCookie, SPAWN_INTERVAL);
+    rafId = requestAnimationFrame(tick);
+  }
+
+  reset();
+  window.addEventListener('resize', reset);
+}
+
 initStickyQuoteBlur();
 initCookieCardExpand();
+initCookieRain();
