@@ -560,11 +560,13 @@ ul{ margin:0; padding:0; list-style:none; }
   will-change: transform;
 }
 
-.cookie-rain-item img{
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+.cookie-stack-layer{
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 100dvh;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 998;
 }
 
 .cookie-stack-img{
@@ -574,6 +576,13 @@ ul{ margin:0; padding:0; list-style:none; }
   width: 100%;
   object-fit: cover;
   object-position: bottom;
+}
+
+.cookie-rain-item img{
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .divider {
