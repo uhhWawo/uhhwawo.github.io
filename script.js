@@ -119,12 +119,12 @@ function initCookieRain() {
 
   const FALLING_COOKIE_SRC = 'assets/cookie/cookie.png';
   const STACK_IMG_SRC = 'assets/cookie/cookie-stack.png';
-  const COOKIE_SIZE = 120;
+  const COOKIE_SIZE = 80;
 
   const FALL_SPAWN_INTERVAL = 180;
   const MAX_FALLING = 100;
-  const FALL_SPEED_MIN = 1.5;
-  const FALL_SPEED_MAX = 2.5;
+  const FALL_SPEED_MIN = 0.5;
+  const FALL_SPEED_MAX = 1.5;
 
   let fallingCookies = [];
 
