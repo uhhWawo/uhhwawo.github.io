@@ -546,7 +546,8 @@ ul{ margin:0; padding:0; list-style:none; }
 
 .cookie-rain{
   position: fixed;
-  inset: 0;
+  top: 0; left: 0; right: 0;
+  height: 100dvh;
   overflow: hidden;
   pointer-events: none;
   z-index: -1;
@@ -594,11 +595,6 @@ html::-webkit-scrollbar {
 @media (max-width: 720px){
   .contact-row { width: 100%; margin-left: 0; box-sizing: border-box; }
   .about-card{ grid-template-columns:1fr; padding:30px; }
-  .cookie-card{
-    margin-left: calc(-1 * var(--cookie-expand));
-    margin-right: calc(-1 * var(--cookie-expand));
-    border-radius: calc(36px - var(--cookie-expand));
-  }
   .about-contact{ width: 100%; }
   .contact-caption{ text-align: center; }
   .grid-asym{ grid-template-columns: 1fr; }
