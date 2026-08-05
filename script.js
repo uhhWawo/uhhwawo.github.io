@@ -115,16 +115,17 @@ function initCookieCardExpand() {
 
 function initCookieRain() {
   const container = document.getElementById('cookieRain');
-  if (!container) return;
+  const stackLayer = document.getElementById('cookieStackLayer');
+  if (!container || !stackLayer) return;
 
   const FALLING_COOKIE_SRC = 'assets/cookie/cookie.png';
   const STACK_IMG_SRC = 'assets/cookie/cookie-stack.png';
-  const COOKIE_SIZE = 80;
+  const COOKIE_SIZE = 34;
 
   const FALL_SPAWN_INTERVAL = 180;
-  const MAX_FALLING = 100;
-  const FALL_SPEED_MIN = 0.5;
-  const FALL_SPEED_MAX = 1.5;
+  const MAX_FALLING = 40;
+  const FALL_SPEED_MIN = 2.5;
+  const FALL_SPEED_MAX = 5;
 
   let fallingCookies = [];
 
@@ -133,7 +134,7 @@ function initCookieRain() {
     img.className = 'cookie-stack-img';
     img.src = STACK_IMG_SRC;
     img.alt = '';
-    container.appendChild(img);
+    stackLayer.appendChild(img); // container가 아니라 stackLayer에 추가
   }
 
   function spawnFallingCookie() {
@@ -155,7 +156,7 @@ function initCookieRain() {
     img.src = FALLING_COOKIE_SRC;
     img.alt = '';
     el.appendChild(img);
-    container.appendChild(el);
+    container.appendChild(el); // 떨어지는 쿠키는 그대로 뒤쪽 레이어
 
     fallingCookies.push({ el, x, y: -size, rotation, speed, rotSpeed, size });
   }
