@@ -52,39 +52,53 @@ function initStickyQuoteBlur() {
 function initCookieCardExpand() {
   const cards = document.querySelectorAll('.cookie-card');
   if (!cards.length) return;
+
   const START_OFFSET = 80;
   const RANGE = 240;
-  const MAX_EXPAND = 24;
 
-  function isMobile() {
-    return window.matchMedia('(max-width: 720px)').matches;
+  const baseGaps = new Map();
+
+  function measureGaps(card) {
+    const prevML = card.style.marginLeft;
+    const prevMR = card.style.marginRight;
+    card.style.marginLeft = '0px';
+    card.style.marginRight = '0px';
+    const rect = card.getBoundingClientRect();
+    card.style.marginLeft = prevML;
+    card.style.marginRight = prevMR;
+    baseGaps.set(card, {
+      left: rect.left,
+      right: window.innerWidth - rect.right
+    });
   }
+
+  cards.forEach(measureGaps);
+
+  let lastWidth = window.innerWidth;
+  window.addEventListener('resize', () => {
+    if (Math.abs(window.innerWidth - lastWidth) < 5) return; // 높이만 바뀌는 Safari 툴바 이벤트는 무시
+    lastWidth = window.innerWidth;
+    cards.forEach(measureGaps);
+  });
 
   let ticking = false;
 
   function update() {
-    if (!isMobile()) {
-      cards.forEach((card) => {
-        card.style.removeProperty('--cookie-expand');
-        card.style.removeProperty('--cookie-progress');
-      });
-      document.body.style.removeProperty('background-color');
-      ticking = false;
-      return;
-    }
-
     let maxProgress = 0;
     cards.forEach((card) => {
       const rect = card.getBoundingClientRect();
       const scrolledPast = START_OFFSET - rect.top;
       const progress = Math.min(Math.max(scrolledPast / RANGE, 0), 1);
-      card.style.setProperty('--cookie-expand', (progress * MAX_EXPAND) + 'px');
+
+      const gaps = baseGaps.get(card) || { left: 0, right: 0 };
+      card.style.marginLeft = (-gaps.left * progress) + 'px';
+      card.style.marginRight = (-gaps.right * progress) + 'px';
       card.style.setProperty('--cookie-progress', progress);
+
       maxProgress = Math.max(maxProgress, progress);
     });
 
     document.body.style.backgroundColor = maxProgress > 0.05 ? '#ffffff' : '';
-
     ticking = false;
   }
 
@@ -96,7 +110,6 @@ function initCookieCardExpand() {
   }
 
   window.addEventListener('scroll', requestUpdate, { passive: true });
-  window.addEventListener('resize', requestUpdate);
   update();
 }
 
