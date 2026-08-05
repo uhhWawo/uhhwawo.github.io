@@ -104,83 +104,60 @@ function initCookieRain() {
   const container = document.getElementById('cookieRain');
   if (!container) return;
 
-  const EMOJI = '🍪';
-  const COOKIE_SIZE = 30;
-  const COLUMN_WIDTH = 24;
-  const MAX_COOKIES = 60;
-  const SPAWN_INTERVAL = 260;
-  const GRAVITY = 0.35;
-  const MAX_FALL_SPEED = 9;
+  const FALLING_COOKIE_SRC = 'assets/cookie/cookie.png';       // 떨어지는 쿠키 이미지
+  const STACK_IMG_SRC = 'assets/cookie/cookie-stack.png';       // 바닥에 쌓인 쿠키 이미지 (한 장)
+  const COOKIE_SIZE = 34;
 
-  let columnHeights = [];
-  let activeCookies = [];
-  let landedCount = 0;
+  const FALL_SPAWN_INTERVAL = 180;
+  const MAX_FALLING = 40;
+  const FALL_SPEED_MIN = 2.5;
+  const FALL_SPEED_MAX = 5;
+
+  let fallingCookies = [];
   let spawnTimer = null;
   let rafId = null;
 
-  function setupColumns() {
-    const cols = Math.ceil(window.innerWidth / COLUMN_WIDTH) + 1;
-    columnHeights = new Array(cols).fill(0);
+  function buildStack() {
+    const img = document.createElement('img');
+    img.className = 'cookie-stack-img';
+    img.src = STACK_IMG_SRC;
+    img.alt = '';
+    container.appendChild(img);
   }
 
-  function getColumnRange(x, width) {
-    const start = Math.max(0, Math.floor(x / COLUMN_WIDTH));
-    const end = Math.min(columnHeights.length - 1, Math.floor((x + width) / COLUMN_WIDTH));
-    return [start, end];
-  }
+  function spawnFallingCookie() {
+    if (fallingCookies.length >= MAX_FALLING) return;
 
-  function getStackHeight(x, width) {
-    const [start, end] = getColumnRange(x, width);
-    let max = 0;
-    for (let i = start; i <= end; i++) {
-      max = Math.max(max, columnHeights[i] || 0);
-    }
-    return max;
-  }
-
-  function setStackHeight(x, width, height) {
-    const [start, end] = getColumnRange(x, width);
-    for (let i = start; i <= end; i++) {
-      columnHeights[i] = Math.max(columnHeights[i] || 0, height);
-    }
-  }
-
-  function spawnCookie() {
-    if (landedCount >= MAX_COOKIES) return;
-
-    const el = document.createElement('span');
+    const el = document.createElement('div');
     el.className = 'cookie-rain-item';
-    el.textContent = EMOJI;
 
-    const x = Math.random() * (window.innerWidth - COOKIE_SIZE);
-    const rotation = (Math.random() * 40) - 20;
-    el.style.fontSize = COOKIE_SIZE + 'px';
-    el.style.transform = `translate(${x}px, -40px) rotate(${rotation}deg)`;
+    const size = COOKIE_SIZE * (0.8 + Math.random() * 0.4);
+    const x = Math.random() * (window.innerWidth - size);
+    const rotation = Math.random() * 360;
+    const speed = FALL_SPEED_MIN + Math.random() * (FALL_SPEED_MAX - FALL_SPEED_MIN);
+    const rotSpeed = (Math.random() * 3) - 1.5;
+
+    el.style.width = size + 'px';
+    el.style.height = size + 'px';
+
+    const img = document.createElement('img');
+    img.src = FALLING_COOKIE_SRC;
+    img.alt = '';
+    el.appendChild(img);
     container.appendChild(el);
 
-    activeCookies.push({
-      el, x, y: -40, vy: 0,
-      rotation,
-      rotSpeed: (Math.random() * 4) - 2,
-      width: COOKIE_SIZE
-    });
+    fallingCookies.push({ el, x, y: -size, rotation, speed, rotSpeed, size });
   }
 
   function tick() {
-    const groundY = window.innerHeight;
-    activeCookies = activeCookies.filter((c) => {
-      c.vy = Math.min(c.vy + GRAVITY, MAX_FALL_SPEED);
-      c.y += c.vy;
+    const bottomLimit = window.innerHeight + 60;
+
+    fallingCookies = fallingCookies.filter((c) => {
+      c.y += c.speed;
       c.rotation += c.rotSpeed;
 
-      const stackHeight = getStackHeight(c.x, c.width);
-      const landingY = groundY - stackHeight - c.width * 0.6;
-
-      if (c.y >= landingY) {
-        c.y = landingY;
-        c.el.style.transform = `translate(${c.x}px, ${c.y}px) rotate(${c.rotation}deg)`;
-        setStackHeight(c.x, c.width, stackHeight + c.width * 0.55);
-        landedCount++;
+      if (c.y > bottomLimit) {
+        c.el.remove();
         return false;
       }
 
@@ -195,10 +172,10 @@ function initCookieRain() {
     clearInterval(spawnTimer);
     cancelAnimationFrame(rafId);
     container.innerHTML = '';
-    activeCookies = [];
-    landedCount = 0;
-    setupColumns();
-    spawnTimer = setInterval(spawnCookie, SPAWN_INTERVAL);
+    fallingCookies = [];
+
+    buildStack();
+    spawnTimer = setInterval(spawnFallingCookie, FALL_SPAWN_INTERVAL);
     rafId = requestAnimationFrame(tick);
   }
 
