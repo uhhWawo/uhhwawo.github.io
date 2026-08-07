@@ -51,6 +51,10 @@ html {
   scroll-behavior: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
+
+  background: var(--bg);
+  color-scheme: dark;
+  overscroll-behavior-y: none;
 }
 
 html::-webkit-scrollbar {
@@ -60,6 +64,7 @@ html::-webkit-scrollbar {
 
 body {
   margin: 0;
+  min-height: 100vh;
 
   background: var(--bg);
   color: var(--text);
@@ -67,7 +72,6 @@ body {
   font-family: var(--font);
   -webkit-font-smoothing: antialiased;
 
-  transition: background-color .3s ease;
 
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -75,19 +79,34 @@ body {
   user-select: none;
 }
 
+
+/*
+ * @ybouane/liquidglass 구조
+ */
 .liquid-glass-root {
   position: relative;
   min-height: 100vh;
-}
-
-.site-scene {
-  position: relative;
-  min-height: 100vh;
-
   background: var(--bg);
   color: var(--text);
+  overscroll-behavior-y: none;
+}
 
-  transition: background-color .3s ease;
+/* Safari 캡처/합성 사이에도 항상 검정색이 남는 capture floor */
+.liquid-glass-capture-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: var(--bg);
+  pointer-events: none;
+}
+
+/* 실제 페이지 내용. 바닥색은 capture floor가 담당한다. */
+.site-scene {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  background: transparent;
+  color: var(--text);
 }
 
 
@@ -130,6 +149,11 @@ img {
   user-drag: none;
   pointer-events: none;
 }
+
+
+/* =========================
+   Header / About
+   ========================= */
 
 .top-mark {
   display: flex;
@@ -359,6 +383,11 @@ img {
   opacity: 1;
 }
 
+
+/* =========================
+   Projects
+   ========================= */
+
 .project {
   margin-bottom: 32px;
 }
@@ -583,6 +612,11 @@ img {
   color: #111114;
 }
 
+
+/* =========================
+   Footer
+   ========================= */
+
 .footer {
   text-align: center;
 
@@ -597,6 +631,11 @@ img {
   font-weight: 800;
   letter-spacing: -0.13em;
 }
+
+
+/* =========================
+   Cookie policy page helpers
+   ========================= */
 
 .cookie-card {
   --cookie-progress: 0;
@@ -722,6 +761,15 @@ img {
   border-bottom: none;
 }
 
+
+/* =====================================================
+   Cookie banner - @ybouane/liquidglass WebGL
+   ===================================================== */
+
+/*
+ * 이것 자체가 LiquidGlass glass element다.
+ * wrapper 안의 inner가 아니다.
+ */
 .cookie-banner {
   position: fixed;
 
@@ -755,9 +803,21 @@ img {
   color:
     rgba(18,18,22,.96);
 
-  background: transparent;
-  border: 0;
+  /*
+   * 시각적인 glass 본체는 라이브러리가 삽입하는
+   * WebGL canvas가 담당한다.
+   *
+   * background / backdrop-filter / border를
+   * 별도로 겹치지 않는다.
+   */
+  /* WebGL canvas가 한 프레임 투명해져도 흰색이 노출되지 않는 안전망 */
+  background: rgba(18,18,22,.10);
+  border: 1px solid rgba(255,255,255,.18);
 
+  /*
+   * 라이브러리 canvas의 shadow halo가
+   * 요소 밖까지 나올 수 있으므로 hidden 금지.
+   */
   overflow: visible;
 
   pointer-events: auto;
@@ -775,6 +835,11 @@ img {
       cubic-bezier(.2,.8,.2,1);
 }
 
+
+/*
+ * hidden attribute는 초기 WebGL 생성 전
+ * 배너을 완전히 감춘다.
+ */
 .cookie-banner[hidden] {
   display: none !important;
 }
@@ -789,10 +854,22 @@ img {
     scale(1);
 }
 
+
+/*
+ * LiquidGlass가 첫 번째 자식으로 canvas를 삽입한다.
+ * 버튼/링크 입력을 방해하지 않게 한다.
+ */
 .cookie-banner > canvas {
   pointer-events: none !important;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  will-change: contents;
 }
 
+
+/*
+ * 텍스트와 버튼은 WebGL canvas보다 위.
+ */
 .cookie-banner-text,
 .cookie-banner-actions {
   position: relative;
@@ -910,6 +987,13 @@ img {
     rgba(16,16,20,1);
 }
 
+
+
+
+/*
+ * CDN/WebGL 초기화 실패 시에만 사용.
+ * 정상일 때는 WebGL canvas가 표시된다.
+ */
 .cookie-banner.liquid-glass-fallback {
   overflow: hidden;
 
@@ -931,8 +1015,8 @@ img {
   border-radius: 28px;
 
   box-shadow:
-    0 18px 52px
-      rgba(0,0,0,.22);
+    0 8px 24px
+      rgba(0,0,0,.12);
 }
 
 .cookie-controls {
@@ -1008,6 +1092,11 @@ img {
   background:
     rgba(0,0,0,.3);
 }
+
+
+/* =========================
+   Responsive
+   ========================= */
 
 @media (max-width: 720px) {
   .contact-row {
