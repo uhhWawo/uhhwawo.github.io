@@ -32,44 +32,15 @@
 
   <link rel="stylesheet" href="style.css">
 
-  <script>
-    if (location.protocol === 'file:') {
-      window.addEventListener('DOMContentLoaded', () => {
-        const warning = document.createElement('div');
-        warning.style.cssText = [
-          'position:fixed',
-          'inset:16px 16px auto 16px',
-          'z-index:999999',
-          'padding:16px 18px',
-          'border-radius:16px',
-          'background:#111',
-          'color:#fff',
-          'font:600 14px/1.5 system-ui,sans-serif',
-          'box-shadow:0 8px 30px rgba(0,0,0,.35)'
-        ].join(';');
-        warning.textContent =
-          '이 페이지는 file:// 직접 실행을 지원하지 않습니다. ' +
-          'WebSite 폴더의 START_SERVER.bat을 더블클릭한 뒤 localhost:5500으로 접속하세요.';
-        document.body.appendChild(warning);
-      });
-    }
-  </script>
-
 </head>
 
 
 <body>
-
-  <!--
-    @ybouane/liquidglass의 root.
-    glass element는 반드시 이 root의 직접 자식이어야 한다.
-  -->
   <div
     id="liquidGlassRoot"
     class="liquid-glass-root"
   >
 
-    <!-- WebGL이 캡처할 실제 페이지 장면 -->
     <div class="liquid-glass-capture-bg" aria-hidden="true"></div>
 
     <div class="site-scene" id="liquidGlassScene">
@@ -98,7 +69,7 @@
         <ul class="about-list">
           <li>Roblox 개발한 체험들 총 방문수 32만+</li>
           <li>Roblox 6년차 개발자</li>
-          <li>Roblox 공식 챌린지 「UI를 부탁해!」 최종 후보 선정</li>
+          <li>Roblox 공식 UI 개발 챌린지 「UI를 부탁해!」 최종 후보 선정</li>
         </ul>
       </div>
 
@@ -366,11 +337,6 @@
   </div>
     </div>
 
-
-    <!--
-      실제 LiquidGlass 요소.
-      root의 직접 자식이며, 라이브러리가 canvas를 자동 삽입한다.
-    -->
     <div
       class="cookie-banner"
       id="cookieBanner"
@@ -415,12 +381,8 @@
 
   </div>
 
-
-  <!-- 페이지 기본 동작 -->
   <script src="script.js"></script>
 
-
-  <!-- 부드러운 스크롤 -->
   <script src="https://unpkg.com/lenis@1.3.13/dist/lenis.min.js"></script>
 
   <script>
@@ -431,10 +393,6 @@
         wheelMultiplier: 1.2,
       });
 
-      /*
-       * LiquidGlass가 Lenis의 실제 스크롤 프레임에도
-       * 배경 캡처를 동기화할 수 있도록 노출.
-       */
       window.wawoLenis = lenis;
 
       function lenisRaf(time) {
@@ -446,11 +404,6 @@
     }
   </script>
 
-
-  <!--
-    오픈소스 LiquidGlass 적용 + 쿠키 동의 처리.
-    ES module이므로 type="module" 필수.
-  -->
   <script
     type="module"
     src="liquid-glass-refraction.js"
