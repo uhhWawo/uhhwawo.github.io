@@ -1,3 +1,14 @@
+/*
+ * script.js
+ * 페이지 기본 동작만 담당.
+ * Liquid Glass 관련 코드는 liquid-glass-refraction.js에만 둔다.
+ */
+
+
+/* =========================
+   이미지 지연 로딩
+   ========================= */
+
 document
   .querySelectorAll('img[data-src]')
   .forEach((img) => {
@@ -24,6 +35,11 @@ document
     probe.src = src;
   });
 
+
+/* =========================
+   선택 / 드래그 방지
+   ========================= */
+
 document.addEventListener(
   'contextmenu',
   (event) => {
@@ -44,6 +60,11 @@ document.addEventListener(
     event.preventDefault();
   }
 );
+
+
+/* =========================
+   Sticky quote blur
+   ========================= */
 
 function initStickyQuoteBlur() {
   const wrappers =
@@ -105,6 +126,11 @@ function initStickyQuoteBlur() {
 
   update();
 }
+
+
+/* =========================
+   Cookie policy card expand
+   ========================= */
 
 function initCookieCardExpand() {
   const cards =
@@ -192,7 +218,11 @@ function initCookieCardExpand() {
         const scrolledPast =
           START_OFFSET -
           rect.top;
-         
+
+        /*
+         * 기존 동작과 동일하게
+         * 범위를 넘으면 한번에 확장.
+         */
         const progress =
           scrolledPast >= RANGE
             ? 1
