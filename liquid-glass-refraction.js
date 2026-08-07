@@ -1,16 +1,3 @@
-/*
- * liquid-glass-refraction.js
- *
- * Wawo cookie banner integration for:
- * https://github.com/ybouane/liquidglass
- *
- * Library: @ybouane/liquidglass
- * License: MIT
- *
- * 이 파일에는 자체 displacement shader가 없다.
- * 실제 굴절/blur/fresnel은 오픈소스 LiquidGlass가 처리한다.
- */
-
 const LIQUID_GLASS_CDN =
   'https://cdn.jsdelivr.net/npm/@ybouane/liquidglass@1.0.3/dist/index.js';
 
@@ -26,6 +13,11 @@ const EXPIRE_DAYS = 1;
 const root =
   document.getElementById(
     'liquidGlassRoot'
+  );
+
+const scene =
+  document.getElementById(
+    'liquidGlassScene'
   );
 
 const banner =
@@ -45,11 +37,6 @@ const rejectBtn =
 
 
 let liquidGlassInstance = null;
-
-
-/* =========================================
-   Cookie helpers
-   ========================================= */
 
 function setCookie(
   name,
@@ -116,15 +103,6 @@ function applyConsent(value) {
   );
 }
 
-
-/* =========================================
-   Wait for assets
-   ========================================= */
-
-/*
- * script.js가 data-src 이미지를 실제 src로
- * 교체한 뒤 LiquidGlass가 장면을 캡처하도록 기다린다.
- */
 async function waitForPageImages() {
   const images =
     [
@@ -182,11 +160,6 @@ async function waitForPageImages() {
               }
             );
 
-
-            /*
-             * 이미지 하나 때문에 영원히 init이
-             * 멈추지 않도록 timeout.
-             */
             setTimeout(
               finish,
               3500
@@ -197,11 +170,6 @@ async function waitForPageImages() {
     )
   );
 }
-
-
-/* =========================================
-   LiquidGlass
-   ========================================= */
 
 async function loadLiquidGlassLibrary() {
   if (LiquidGlass) {
@@ -220,7 +188,7 @@ async function loadLiquidGlassLibrary() {
     return LiquidGlass;
   } catch (error) {
     console.error(
-      '[LiquidGlass] CDN 모듈 로드 실패:',
+      'CDN 모듈 로드 실패:',
       error
     );
 
@@ -253,18 +221,6 @@ async function initLiquidGlass() {
     return;
   }
 
-
-  /*
-   * 마우스 반사광 / hover glass 효과는 꺼둔다.
-   *
-   * - specular: 0
-   * - button: false
-   * - floating: false
-   *
-   * cornerRadius 28px은 CSS 배너 모양과 맞춤.
-   * zRadius는 너무 크면 코너가 과하게 볼록해져
-   * 22px로 낮춘다.
-   */
   banner.dataset.config =
     JSON.stringify({
       blurAmount: 0.10,
@@ -308,9 +264,6 @@ async function initLiquidGlass() {
 
 
   try {
-    /*
-     * SF Pro가 로딩된 다음 캡처하는 편이 안전하다.
-     */
     if (document.fonts?.ready) {
       await document.fonts.ready;
     }
@@ -331,15 +284,13 @@ async function initLiquidGlass() {
     banner.dataset.refraction =
       'ybouane-liquidglass';
 
+    startLiveScrollSync();
+
 
     console.info(
       '[LiquidGlass] @ybouane/liquidglass 적용 완료'
     );
   } catch (error) {
-    /*
-     * WebGL 또는 캡처 실패 시 배너 자체는
-     * 계속 사용할 수 있도록 fallback class.
-     */
     banner.classList.add(
       'liquid-glass-fallback'
     );
@@ -355,10 +306,191 @@ async function initLiquidGlass() {
   }
 }
 
+let liveSyncStarted = false;
+let liveSyncFrame = 0;
+let liveSyncEndTimer = 0;
+let lastLiveCapture = 0;
 
-/* =========================================
-   Banner show / hide
-   ========================================= */
+const LIVE_CAPTURE_INTERVAL =
+  matchMedia(
+    '(pointer: coarse)'
+  ).matches
+    ? 1000 / 24
+    : 1000 / 30;
+
+
+function invalidateLiveScene(
+  force = false
+) {
+  if (
+    !liquidGlassInstance ||
+    !scene ||
+    banner?.hidden
+  ) {
+    return;
+  }
+
+
+  const now =
+    performance.now();
+
+
+  if (
+    !force &&
+    now - lastLiveCapture <
+      LIVE_CAPTURE_INTERVAL
+  ) {
+    return;
+  }
+
+
+  lastLiveCapture = now;
+
+  liquidGlassInstance
+    .markChanged(scene);
+}
+
+
+function requestLiveSceneUpdate() {
+  if (
+    !liquidGlassInstance ||
+    !scene ||
+    banner?.hidden
+  ) {
+    return;
+  }
+
+
+  if (!liveSyncFrame) {
+    liveSyncFrame =
+      requestAnimationFrame(
+        () => {
+          liveSyncFrame = 0;
+
+          invalidateLiveScene(
+            false
+          );
+        }
+      );
+  }
+
+  clearTimeout(
+    liveSyncEndTimer
+  );
+
+  liveSyncEndTimer =
+    setTimeout(
+      () => {
+        invalidateLiveScene(
+          true
+        );
+      },
+      90
+    );
+}
+
+
+function startLiveScrollSync() {
+  if (
+    liveSyncStarted ||
+    !scene
+  ) {
+    return;
+  }
+
+
+  liveSyncStarted = true;
+
+  window.addEventListener(
+    'scroll',
+    requestLiveSceneUpdate,
+    {
+      passive: true
+    }
+  );
+
+  const lenis =
+    window.wawoLenis;
+
+
+  if (
+    lenis &&
+    typeof lenis.on === 'function'
+  ) {
+    lenis.on(
+      'scroll',
+      requestLiveSceneUpdate
+    );
+  }
+
+  window.addEventListener(
+    'resize',
+    () => {
+      requestLiveSceneUpdate();
+    },
+    {
+      passive: true
+    }
+  );
+
+  scene
+    .querySelectorAll('img')
+    .forEach(
+      (img) => {
+        img.addEventListener(
+          'load',
+          () => {
+            invalidateLiveScene(
+              true
+            );
+          }
+        );
+      }
+    );
+
+  const sceneObserver =
+    new MutationObserver(
+      () => {
+        requestLiveSceneUpdate();
+      }
+    );
+
+
+  sceneObserver.observe(
+    scene,
+    {
+      subtree: true,
+      childList: true,
+      attributes: true,
+      attributeFilter: [
+        'class',
+        'style',
+        'src'
+      ]
+    }
+  );
+
+
+  requestAnimationFrame(
+    () => {
+      invalidateLiveScene(
+        true
+      );
+    }
+  );
+
+
+  console.info(
+    '실시간 스크롤 동기화 시작',
+    {
+      captureFPS:
+        Math.round(
+          1000 /
+          LIVE_CAPTURE_INTERVAL
+        )
+    }
+  );
+}
 
 async function showBanner() {
   if (!banner) return;
@@ -375,11 +507,6 @@ async function showBanner() {
     }
   );
 
-
-  /*
-   * 배너가 display:none 상태일 때 init하면
-   * 크기가 0이므로 보인 뒤 초기화한다.
-   */
   await initLiquidGlass();
 }
 
@@ -407,12 +534,6 @@ function hideBanner() {
     300
   );
 }
-
-
-/* =========================================
-   Init consent
-   ========================================= */
-
 async function init() {
   if (
     !root ||
@@ -421,7 +542,7 @@ async function init() {
     !rejectBtn
   ) {
     console.warn(
-      '[LiquidGlass] 쿠키 배너 DOM을 찾지 못했습니다.'
+      '쿠키 배너 DOM을 찾지 못했습니다.'
     );
 
     return;
@@ -480,25 +601,6 @@ async function init() {
   );
 
 
-  /*
-   * script.js에서 이미지 src가 나중에 변경되는 경우
-   * LiquidGlass에게 장면을 다시 캡처하라고 알려준다.
-   */
-  document
-    .querySelectorAll(
-      '.site-scene img'
-    )
-    .forEach(
-      (img) => {
-        img.addEventListener(
-          'load',
-          () => {
-            liquidGlassInstance
-              ?.markChanged();
-          }
-        );
-      }
-    );
 }
 
 
