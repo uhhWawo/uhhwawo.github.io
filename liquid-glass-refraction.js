@@ -183,7 +183,7 @@ async function initLiquidGlass() {
     startLiveScrollSync();
 
     console.info('', {
-      targetFPS: 120,
+      targetFPS: 30,
       safari: isSafari,
       blurAmount: 0,
       shadowOpacity: 0
@@ -195,7 +195,7 @@ async function initLiquidGlass() {
   }
 }
 
-const TARGET_FPS = 120;
+const TARGET_FPS = 30;
 const FRAME_INTERVAL = 1000 / TARGET_FPS;
 const SCROLL_ACTIVE_WINDOW = 150;
 
