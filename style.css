@@ -79,30 +79,6 @@ body {
   user-select: none;
 }
 
-.liquid-glass-root {
-  position: relative;
-  min-height: 100vh;
-  background: var(--bg);
-  color: var(--text);
-  overscroll-behavior-y: none;
-}
-
-.liquid-glass-capture-bg {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  background: var(--bg);
-  pointer-events: none;
-}
-.site-scene {
-  position: relative;
-  z-index: 1;
-  min-height: 100vh;
-  background: transparent;
-  color: var(--text);
-}
-
-
 h1,
 h2,
 h3,
@@ -749,6 +725,22 @@ img {
     1120px
   );
 
+  pointer-events: auto;
+
+  opacity: 0;
+
+  transform:
+    translateX(-50%)
+    translateY(12px)
+    scale(.985);
+
+  transition:
+    opacity 300ms ease,
+    transform 300ms
+      cubic-bezier(.2,.8,.2,1);
+}
+
+.cookie-banner-inner {
   min-height: 86px;
 
   display: flex;
@@ -766,24 +758,25 @@ img {
   color:
     rgba(18,18,22,.96);
 
-  background: rgba(18,18,22,.10);
-  border: 1px solid rgba(255,255,255,.18);
+  background:
+    rgba(245,245,247,.62);
 
-  overflow: visible;
+  border:
+    1px solid rgba(255,255,255,.50);
 
-  pointer-events: auto;
+  border-radius: 28px;
 
-  opacity: 0;
+  overflow: hidden;
 
-  transform:
-    translateX(-50%)
-    translateY(12px)
-    scale(.985);
+  -webkit-backdrop-filter:
+    blur(18px);
 
-  transition:
-    opacity 300ms ease,
-    transform 300ms
-      cubic-bezier(.2,.8,.2,1);
+  backdrop-filter:
+    blur(18px);
+
+  box-shadow:
+    0 8px 24px
+      rgba(0,0,0,.12);
 }
 
 .cookie-banner[hidden] {
@@ -798,13 +791,6 @@ img {
     translateX(-50%)
     translateY(0)
     scale(1);
-}
-
-.cookie-banner > canvas {
-  pointer-events: none !important;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  will-change: contents;
 }
 
 .cookie-banner-text,
@@ -922,31 +908,6 @@ img {
 .cookie-btn-accept:hover {
   background:
     rgba(16,16,20,1);
-}
-
-.cookie-banner.liquid-glass-fallback {
-  overflow: hidden;
-
-  background:
-    rgba(238,244,252,.62);
-
-  border:
-    1px solid
-    rgba(255,255,255,.50);
-
-  -webkit-backdrop-filter:
-    blur(18px)
-    saturate(150%);
-
-  backdrop-filter:
-    blur(18px)
-    saturate(150%);
-
-  border-radius: 28px;
-
-  box-shadow:
-    0 8px 24px
-      rgba(0,0,0,.12);
 }
 
 .cookie-controls {
@@ -1076,7 +1037,9 @@ img {
         8px,
         env(safe-area-inset-bottom)
       );
+  }
 
+  .cookie-banner-inner {
     flex-direction: column;
     align-items: stretch;
 
@@ -1109,7 +1072,7 @@ img {
   or
   (-webkit-backdrop-filter: blur(1px))
 ) {
-  .cookie-banner {
+  .cookie-banner-inner {
     background:
       rgba(245,245,247,.90);
   }
