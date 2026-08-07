@@ -100,7 +100,7 @@ async function initLiquidGlass() {
     startLiveScrollSync();
 
     console.info('[LiquidGlass] v6 적용 완료', {
-      targetFPS: 60,
+      targetFPS: 120,
       safari: isSafari,
       blurAmount: 0,
       shadowOpacity: 0
@@ -117,7 +117,7 @@ async function initLiquidGlass() {
  * 무인자 markChanged()로 모든 glass shader만 dirty 처리한다.
  * 캐시된 scene은 현재 getBoundingClientRect 위치로 다시 합성된다.
  */
-const TARGET_FPS = 60;
+const TARGET_FPS = 120;
 const FRAME_INTERVAL = 1000 / TARGET_FPS;
 const SCROLL_ACTIVE_WINDOW = 150;
 
