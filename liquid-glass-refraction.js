@@ -1,9 +1,5 @@
 /*
- * Wawo + @ybouane/liquidglass v6
- * - scroll redraw capped at 60fps
- * - scroll only re-runs cached scene + shader; no DOM re-rasterisation
- * - Safari dark capture floor / visualViewport sync
- * - extra LiquidGlass blur and shadow halo disabled
+ * @ybouane/liquidglass v6
  */
 
 import { LiquidGlass } from 'https://cdn.jsdelivr.net/npm/@ybouane/liquidglass@1.0.3/dist/index.js';
@@ -18,6 +14,16 @@ const acceptBtn = document.getElementById('cookieAccept');
 const rejectBtn = document.getElementById('cookieReject');
 
 let liquidGlassInstance = null;
+
+const isIOS =
+  /iPad|iPhone|iPod/i.test(
+    navigator.userAgent
+  ) ||
+  (
+    navigator.platform ===
+      'MacIntel' &&
+    navigator.maxTouchPoints > 1
+  );
 
 const ua = navigator.userAgent;
 const isSafari = /Safari/i.test(ua) && !/(Chrome|Chromium|CriOS|Edg|OPR|Firefox|FxiOS)\//i.test(ua);
@@ -62,6 +68,83 @@ async function waitForPageImages() {
   }));
 }
 
+let lastLayoutWidth =
+  document.documentElement.clientWidth;
+
+let lastDpr =
+  window.devicePixelRatio || 1;
+
+let lastOrientation =
+  screen.orientation?.angle ??
+  window.orientation ??
+  0;
+
+
+function installIOSViewportResizeGuard() {
+  if (!isIOS) return;
+
+
+  window.addEventListener(
+    'resize',
+    (event) => {
+      const width =
+        document.documentElement
+          .clientWidth;
+
+      const dpr =
+        window.devicePixelRatio || 1;
+
+      const orientation =
+        screen.orientation?.angle ??
+        window.orientation ??
+        0;
+
+
+      const realLayoutResize =
+        Math.abs(
+          width -
+          lastLayoutWidth
+        ) > 2 ||
+
+        Math.abs(
+          dpr -
+          lastDpr
+        ) > 0.01 ||
+
+        orientation !==
+          lastOrientation;
+      
+      if (realLayoutResize) {
+        lastLayoutWidth =
+          width;
+
+        lastDpr =
+          dpr;
+
+        lastOrientation =
+          orientation;
+
+        return;
+      }
+      event.stopImmediatePropagation();
+
+
+      requestAnimationFrame(
+        () => {
+          liquidGlassInstance
+            ?.markChanged();
+        }
+      );
+    },
+    {
+      passive: true
+    }
+  );
+}
+
+
+installIOSViewportResizeGuard();
+
 async function initLiquidGlass() {
   if (liquidGlassInstance || !root || !banner) return;
 
@@ -99,7 +182,7 @@ async function initLiquidGlass() {
     banner.dataset.refraction = 'ybouane-liquidglass';
     startLiveScrollSync();
 
-    console.info('[LiquidGlass] v6 적용 완료', {
+    console.info('', {
       targetFPS: 120,
       safari: isSafari,
       blurAmount: 0,
@@ -108,15 +191,10 @@ async function initLiquidGlass() {
   } catch (error) {
     banner.classList.add('liquid-glass-fallback');
     banner.dataset.refraction = 'fallback';
-    console.error('[LiquidGlass] 초기화 실패:', error);
+    console.error('초기화 실패:', error);
   }
 }
 
-/*
- * 스크롤 중에는 static DOM wrapper를 다시 html-to-image로 굽지 않는다.
- * 무인자 markChanged()로 모든 glass shader만 dirty 처리한다.
- * 캐시된 scene은 현재 getBoundingClientRect 위치로 다시 합성된다.
- */
 const TARGET_FPS = 120;
 const FRAME_INTERVAL = 1000 / TARGET_FPS;
 const SCROLL_ACTIVE_WINDOW = 150;
@@ -180,7 +258,7 @@ function startLiveScrollSync() {
   window.addEventListener('resize', signalScroll, { passive: true });
   requestAnimationFrame(() => renderGlassForCurrentScroll(true));
 
-  console.info('[LiquidGlass] 60fps scroll sync 시작', {
+  console.info('scroll sync 시작', {
     targetFPS: TARGET_FPS,
     mode: 'cached-scene shader redraw',
     safari: isSafari
@@ -215,9 +293,78 @@ function hideBanner() {
   }, 300);
 }
 
+
+
+let sceneCaptureRunning = false;
+let sceneCaptureAgain = false;
+
+
+async function recaptureLiquidGlassScene() {
+  if (
+    !liquidGlassInstance ||
+    !scene
+  ) {
+    return;
+  }
+
+
+  if (sceneCaptureRunning) {
+    sceneCaptureAgain = true;
+    return;
+  }
+
+
+  sceneCaptureRunning = true;
+
+
+  try {
+    do {
+      sceneCaptureAgain = false;
+
+
+      const capture =
+        liquidGlassInstance.capture;
+
+      if (
+        capture &&
+        typeof capture.captureElement ===
+          'function'
+      ) {
+        await capture.captureElement(
+          scene,
+          true
+        );
+
+
+        liquidGlassInstance
+          .markChanged(scene);
+      } else {
+        liquidGlassInstance
+          .markChanged();
+      }
+
+    } while (sceneCaptureAgain);
+
+  } finally {
+    sceneCaptureRunning = false;
+  }
+}
+
+
+window.addEventListener(
+  'wawo:quote-visual-change',
+  () => {
+    requestAnimationFrame(
+      () => {
+        recaptureLiquidGlassScene();
+      }
+    );
+  }
+);
+
 async function init() {
   if (!root || !scene || !banner || !acceptBtn || !rejectBtn) {
-    console.warn('[LiquidGlass] 필요한 DOM을 찾지 못했습니다.');
+    console.warn('필요한 DOM을 찾지 못했습니다.');
     return;
   }
 
