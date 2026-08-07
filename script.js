@@ -198,10 +198,15 @@ function initCookieCardExpand() {
           START_OFFSET -
           rect.top;
 
+        // 0 ~ 1 사이로 부드럽게 변화
         const progress =
-          scrolledPast >= RANGE
-            ? 1
-            : 0;
+          Math.min(
+            Math.max(
+              scrolledPast / RANGE,
+              0
+            ),
+            1
+          );
 
         const gaps =
           baseGaps.get(card) ||
@@ -235,11 +240,20 @@ function initCookieCardExpand() {
       }
     );
 
+    // #151515 → #ffffff
+    const start = 21;
+    const end = 255;
+
+    const value =
+      Math.round(
+        start +
+        (end - start) *
+        maxProgress
+      );
+
     document.body.style
       .backgroundColor =
-        maxProgress > 0.05
-          ? '#ffffff'
-          : '';
+        `rgb(${value}, ${value}, ${value})`;
 
     ticking = false;
   }
@@ -256,6 +270,11 @@ function initCookieCardExpand() {
     'scroll',
     requestUpdate,
     { passive: true }
+  );
+
+  window.addEventListener(
+    'resize',
+    requestUpdate
   );
 
   update();
