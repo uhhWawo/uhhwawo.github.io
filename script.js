@@ -261,5 +261,131 @@ function initCookieCardExpand() {
   update();
 }
 
+function initCookieBanner() {
+  const banner =
+    document.getElementById(
+      'cookieBanner'
+    );
+
+  const acceptBtn =
+    document.getElementById(
+      'cookieAccept'
+    );
+
+  const rejectBtn =
+    document.getElementById(
+      'cookieReject'
+    );
+
+  if (
+    !banner ||
+    !acceptBtn ||
+    !rejectBtn
+  ) {
+    return;
+  }
+
+  const STORAGE_KEY =
+    'wawo-cookie-consent';
+
+  const saved =
+    localStorage.getItem(
+      STORAGE_KEY
+    );
+
+  function updateConsent(
+    granted
+  ) {
+    if (
+      typeof window.gtag ===
+      'function'
+    ) {
+      window.gtag(
+        'consent',
+        'update',
+        {
+          analytics_storage:
+            granted
+              ? 'granted'
+              : 'denied',
+
+          ad_storage:
+            granted
+              ? 'granted'
+              : 'denied'
+        }
+      );
+    }
+  }
+
+  function showBanner() {
+    banner.hidden = false;
+
+    requestAnimationFrame(
+      () => {
+        requestAnimationFrame(
+          () => {
+            banner.classList.add(
+              'is-visible'
+            );
+          }
+        );
+      }
+    );
+  }
+
+  function hideBanner() {
+    banner.classList.remove(
+      'is-visible'
+    );
+
+    setTimeout(
+      () => {
+        banner.hidden = true;
+      },
+      300
+    );
+  }
+
+  acceptBtn.addEventListener(
+    'click',
+    () => {
+      localStorage.setItem(
+        STORAGE_KEY,
+        'accepted'
+      );
+
+      updateConsent(true);
+      hideBanner();
+    }
+  );
+
+  rejectBtn.addEventListener(
+    'click',
+    () => {
+      localStorage.setItem(
+        STORAGE_KEY,
+        'rejected'
+      );
+
+      updateConsent(false);
+      hideBanner();
+    }
+  );
+
+  if (saved === 'accepted') {
+    updateConsent(true);
+    return;
+  }
+
+  if (saved === 'rejected') {
+    updateConsent(false);
+    return;
+  }
+
+  showBanner();
+}
+
+initCookieBanner();
 initStickyQuoteBlur();
 initCookieCardExpand();
